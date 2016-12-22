@@ -116,3 +116,6 @@ ws.onmessage = function (event) {
     // END DEBUG
 }
 
+document.body.onkeydown = function(e) {
+    ws.send(e.keyCode);
+}
