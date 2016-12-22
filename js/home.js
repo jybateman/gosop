@@ -9,7 +9,7 @@ var ppos = bsize/2;
 var layout = [];
 var xy;
 var player;
-var plsize = 5;
+var plsize = 7
 
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
@@ -31,7 +31,7 @@ function drawPlayer() {
     drawSquare(x, y, layout[x+y*xy[0]])
 
     ctx.beginPath();
-    ctx.strokeStyle = 'yellow';
+    ctx.strokeStyle = 'black';
     ctx.fillStyle = 'yellow';
     ctx.arc(player%(xy[0]*bsize), player/(xy[0]*bsize), plsize, 0, 2*Math.PI);
     ctx.fill();

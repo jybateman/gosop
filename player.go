@@ -16,6 +16,7 @@ type player struct {
 	pos int
 	dir int
 	char int
+	speed int
 }
 
 func (p *player) move(xy int) {
@@ -38,13 +39,13 @@ func (p *player) ChangeDir(key string) {
 func (p *player) MovePlayer(width int) {
 	switch p.dir {
 	case up:
-		p.pos -= width*bsize
+		p.pos -= width*bsize*p.speed
 	case right:
-		p.pos++
+		p.pos += p.speed
 	case down:
-		p.pos += width*bsize
+		p.pos += width*bsize*p.speed
 	case left:
-		p.pos--
+		p.pos -= p.speed
 	}
 }
 
@@ -52,6 +53,7 @@ func NewPlayer(m *maps) player {
 	var p player
 
 	p.dir = right
+	p.speed = 5
 	xy := bytes.IndexByte(m.layout, 'P')
 	fmt.Println(xy, m.x, bsize)
 	p.pos = xy%m.x*bsize+xy/m.x*m.x*bsize*bsize
