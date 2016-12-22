@@ -18,9 +18,28 @@ type player struct {
 	char int
 }
 
+func (p *player) move(xy int) {
+	
+}
+
+func (p *player) MovePlayer(width int) {
+	switch p.dir {
+	case up:
+		p.pos -= width*bsize
+	case right:
+		p.pos++
+	case down:
+		p.pos += width*bsize
+	case left:
+		p.pos--
+		
+	}
+}
+
 func NewPlayer(m *maps) player {
 	var p player
 
+	p.dir = up
 	xy := bytes.IndexByte(m.layout, 'P')
 	fmt.Println(xy, m.x, bsize)
 	p.pos = xy%m.x*bsize+xy/m.x*m.x*bsize*bsize
