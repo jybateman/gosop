@@ -24,7 +24,8 @@ func NewPlayer(m *maps) player {
 	xy := bytes.IndexByte(m.layout, 'P')
 	fmt.Println(xy, m.x, bsize)
 	p.pos = xy%m.x*bsize+xy/m.x*m.x*bsize*bsize
-	txy := p.pos / bsize / m.x
-	fmt.Println("txy:", txy, "xy:", xy)
+	// txy := (p.pos / (bsize * m.x) * m.x + p.pos % (bsize * m.x)) / bsize
+	txy := p.pos % (bsize * m.x) / bsize
+	fmt.Println("txy:",txy, "xy:", xy)
 	return p
 }

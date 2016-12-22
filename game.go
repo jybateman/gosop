@@ -22,6 +22,6 @@ func StartGame(c *websocket.Conn) {
 	for {
 		c.Write([]byte(fmt.Sprintf("%v", g.p.pos)))
 		time.Sleep(time.Millisecond*17)
-		g.p.pos += 5
+		g.p.pos += 10
 	}
 }

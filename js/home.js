@@ -16,16 +16,46 @@ var ctx = c.getContext("2d");
 
 // Draw player on canvas
 function drawPlayer() {
-    ctx.beginPath();
+    var x = Math.floor(player%(bsize*xy[0])/bsize);
+    var y = Math.floor(player/(bsize*xy[0])/bsize);
+    drawSquare(x+1, y, layout[x+1+y*xy[0]])
+    drawSquare(x-1, y, layout[x-1+y*xy[0]])
+    drawSquare(x, y+1, layout[x+(y+1)*xy[0]])
+    drawSquare(x, y-1, layout[x+(y-1)*xy[0]])
 
-    ctx.fillStyle = 'black';
-    ctx.fillRect(1*bsize, 1*bsize, bsize, bsize);
-    
+    drawSquare(x+1, y+1, layout[x+1+(y+1)*xy[0]])
+    drawSquare(x-1, y-1, layout[x-1+(y-1)*xy[0]])
+    drawSquare(x-1, y+1, layout[x-1+(y+1)*xy[0]])
+    drawSquare(x+1, y-1, layout[x+1+(y-1)*xy[0]])
+
+    drawSquare(x, y, layout[x+y*xy[0]])
+
+    ctx.beginPath();
     ctx.strokeStyle = 'yellow';
     ctx.fillStyle = 'yellow';
     ctx.arc(player%(xy[0]*bsize), player/(xy[0]*bsize), plsize, 0, 2*Math.PI);
     ctx.fill();
     ctx.stroke();
+}
+
+function drawSquare(x, y, b) {
+    if (b == 120) {
+	ctx.fillStyle = 'black';
+	ctx.fillRect(x*bsize, y*bsize, bsize, bsize);
+    } else if (b == 46) {
+	ctx.beginPath();
+	ctx.strokeStyle = 'green';
+	ctx.fillStyle = 'green';
+	ctx.arc(x*bsize+ppos, y*bsize+ppos, psize, 0, 2*Math.PI);
+	ctx.fill();
+    } else if (b == 42) {
+	ctx.beginPath();
+	ctx.strokeStyle = 'green';
+	ctx.fillStyle = 'green';
+	ctx.arc(x*bsize+ppos, y*bsize+ppos, ppsize, 0, 2*Math.PI);
+	ctx.fill();
+    }
+    // ctx.stroke();
 }
 
 // Draw map on canvas
@@ -78,11 +108,11 @@ ws.onmessage = function (event) {
     	getMapInfo(event.data);
 	drawMap();
     } else {
-    	player = event.datao;
+    	player = event.data;
 	drawPlayer();
     }
     // DEBUG
-    document.getElementById('log').innerHTML = player;
+    // document.getElementById('log').innerHTML = player;
     // END DEBUG
 }
 
