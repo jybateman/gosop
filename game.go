@@ -25,6 +25,6 @@ func StartGame(c *websocket.Conn) {
 		c.Read(b)
 		g.p.ChangeDir(string(b))
 		c.Write([]byte(fmt.Sprintf("%v", g.p.pos)))
-		g.p.MovePlayer(g.m.x)
+		g.p.MovePlayer(&g.m)
 	}
 }

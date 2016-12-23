@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"bytes"
 )
 
@@ -19,10 +18,6 @@ type player struct {
 	speed int
 }
 
-func (p *player) move(xy int) {
-	
-}
-
 func (p *player) ChangeDir(key string) {
 	switch key {
 	case "38":
@@ -36,16 +31,20 @@ func (p *player) ChangeDir(key string) {
 	}
 }
 
-func (p *player) MovePlayer(width int) {
+func (p *player) MovePlayer(m *maps) {
+	tmp := p.pos
 	switch p.dir {
 	case up:
-		p.pos -= width*bsize*p.speed
+		p.pos -= m.x*bsize*p.speed
 	case right:
 		p.pos += p.speed
 	case down:
-		p.pos += width*bsize*p.speed
+		p.pos += m.x*bsize*p.speed
 	case left:
 		p.pos -= p.speed
+	}
+	if m.isObstacle(p.pos) {
+		p.pos = tmp
 	}
 }
 
@@ -55,10 +54,10 @@ func NewPlayer(m *maps) player {
 	p.dir = right
 	p.speed = 5
 	xy := bytes.IndexByte(m.layout, 'P')
-	fmt.Println(xy, m.x, bsize)
-	p.pos = xy%m.x*bsize+xy/m.x*m.x*bsize*bsize
+	p.pos = (xy%m.x*bsize+bsize/2)+xy/m.x*m.x*bsize*(bsize+bsize/2)
+	// p.pos = xy/m.x*m.x*bsize*(bsize+bsize/2)
 	// txy := (p.pos / (bsize * m.x) * m.x + p.pos % (bsize * m.x)) / bsize
-	txy := p.pos % (bsize * m.x) / bsize
-	fmt.Println("txy:",txy, "xy:", xy)
+	// txy := p.pos % (bsize * m.x) / bsize
+	// fmt.Println("txy:",txy, "xy:", xy)
 	return p
 }

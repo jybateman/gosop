@@ -49,7 +49,11 @@ func getInfo(b *bufio.Reader) (int, int) {
 	return x, y
 }
 
-func (m *maps) isObstacle(xy int) bool {
+func (m *maps) isObstacle(pos int) bool {
+	xy := pos/(bsize*m.x)/bsize* m.x + pos%(bsize*m.x)/bsize
+	if m.layout[xy] == 'x' {
+		return true
+	}
 	return false
 }
 
