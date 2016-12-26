@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"bytes"
 )
 
@@ -19,19 +18,30 @@ type player struct {
 	speed int
 }
 
+func (p *player) PeekObstacle(m *maps) bool {
+	switch p.dir {
+	case up:
+		return m.isObstacle(p.pos-m.x*bsize*bsize)
+	case right:
+		return m.isObstacle(p.pos+bsize)
+	case down:
+		return m.isObstacle(p.pos+m.x*bsize*bsize)
+	case left:
+		return m.isObstacle(p.pos-bsize)
+	}
+	return false
+}
+
 func (p *player) ChangeDir(key string) {
-	fmt.Println(p.pos%bsize, p.pos, bsize)
-	if (p.pos%bsize) == (bsize/2) {
-		switch key {
-		case "38":
-			p.dir = up
-		case "39":
-			p.dir = right
-		case "40":
-			p.dir = down
-		case "37":
-			p.dir = left
-		}
+	switch key {
+	case "38":
+		p.dir = up
+	case "39":
+		p.dir = right
+	case "40":
+		p.dir = down
+	case "37":
+		p.dir = left
 	}
 }
 
@@ -39,13 +49,13 @@ func (p *player) MovePlayer(m *maps) {
 	tmp := p.pos
 	switch p.dir {
 	case up:
-		p.pos -= m.x*bsize*bsize
+		p.pos -= m.x
 	case right:
-		p.pos += bsize
+		p.pos++
 	case down:
-		p.pos += m.x*bsize*bsize
+		p.pos += m.x
 	case left:
-		p.pos -= bsize
+		p.pos--
 	}
 	if m.isObstacle(p.pos) {
 		p.pos = tmp
@@ -57,12 +67,6 @@ func NewPlayer(m *maps) player {
 
 	p.dir = right
 	p.speed = 5
-	xy := bytes.IndexByte(m.layout, 'P')
-	// p.pos = (xy%m.x*bsize+bsize/2)+xy/m.x*m.x*bsize*(bsize+bsize/2)
-	p.pos = (xy%m.x*bsize+bsize/2)+(xy/m.x*m.x*bsize*bsize+bsize/2*bsize*m.x)
-	// p.pos = xy/m.x*m.x*bsize*(bsize+bsize/2)
-	// txy := (p.pos / (bsize * m.x) * m.x + p.pos % (bsize * m.x)) / bsize
-	// txy := p.pos % (bsize * m.x) / bsize
-	// fmt.Println("txy:",txy, "xy:", xy)
+	p.pos = bytes.IndexByte(m.layout, 'P')
 	return p
 }

@@ -9,6 +9,7 @@ var ppos = bsize/2;
 var layout = [];
 var xy;
 var player;
+var pxy;
 var plsize = 7
 
 var c = document.getElementById("myCanvas");
@@ -16,24 +17,21 @@ var ctx = c.getContext("2d");
 
 // Draw player on canvas
 function drawPlayer() {
-    var x = Math.floor(player%(bsize*xy[0])/bsize);
-    var y = Math.floor(player/(bsize*xy[0])/bsize);
+    var x = parseInt(pxy[0]);
+    var y = parseInt(pxy[1]);
+
     drawSquare(x+1, y, layout[x+1+y*xy[0]])
     drawSquare(x-1, y, layout[x-1+y*xy[0]])
     drawSquare(x, y+1, layout[x+(y+1)*xy[0]])
     drawSquare(x, y-1, layout[x+(y-1)*xy[0]])
-
-    drawSquare(x+1, y+1, layout[x+1+(y+1)*xy[0]])
-    drawSquare(x-1, y-1, layout[x-1+(y-1)*xy[0]])
-    drawSquare(x-1, y+1, layout[x-1+(y+1)*xy[0]])
-    drawSquare(x+1, y-1, layout[x+1+(y-1)*xy[0]])
 
     drawSquare(x, y, layout[x+y*xy[0]])
 
     ctx.beginPath();
     ctx.strokeStyle = 'black';
     ctx.fillStyle = 'yellow';
-    ctx.arc(player%(xy[0]*bsize), player/(xy[0]*bsize), plsize, 0, 2*Math.PI);
+    ctx.arc(x*bsize+ppos, y*bsize+ppos, plsize, 0, 2*Math.PI);
+
     ctx.fill();
     ctx.stroke();
 }
@@ -41,23 +39,25 @@ function drawPlayer() {
 function drawSquare(x, y, b) {
     ctx.fillStyle = 'white';
     ctx.fillRect(x*bsize, y*bsize, bsize, bsize);
-    if (b == 120) {
+    switch (parseInt(b)) {
+    case 120:
 	ctx.fillStyle = 'black';
 	ctx.fillRect(x*bsize, y*bsize, bsize, bsize);
-    } else if (b == 46) {
+	break;
+    case 46:
 	ctx.beginPath();
 	ctx.strokeStyle = 'green';
 	ctx.fillStyle = 'green';
 	ctx.arc(x*bsize+ppos, y*bsize+ppos, psize, 0, 2*Math.PI);
 	ctx.fill();
-    } else if (b == 42) {
+	break;
+    case 42:
 	ctx.beginPath();
 	ctx.strokeStyle = 'green';
 	ctx.fillStyle = 'green';
 	ctx.arc(x*bsize+ppos, y*bsize+ppos, ppsize, 0, 2*Math.PI);
 	ctx.fill();
     }
-    // ctx.stroke();
 }
 
 // Draw map on canvas
@@ -95,11 +95,12 @@ ws.onmessage = function (event) {
     	getMapInfo(event.data);
 	drawMap();
     } else {
-    	player = event.data;
+    	str = event.data;
+	pxy = str.split(" ");
 	drawPlayer();
     }
     // DEBUG
-    // document.getElementById('log').innerHTML = player;
+    // document.getElementById('log').innerHTML = pxy;
     // END DEBUG
 }
 
