@@ -1,6 +1,6 @@
 25,22
 xxxxxxxxxxxxxxxxxxxxxxxxx
-x..P....x.......x.......x
+xP......x...............x
 x*xxxxx.x.xxxxx.x.xxxxx*x
 x.......................x
 xxxx.x.xxxx.x.xxxx.x.xxxx
@@ -11,7 +11,7 @@ x.xx.               .xx.x
 x.xx.xxx ### ### xxx.xx.x
 x.xx.x   #     #   x.xx.x
 x.xx.x x ####### x x.xx.x
-x....  x         x  ....x
+x....  x         x .....x
 xxxx.xxxxxx x xxxxxx.xxxx
 -   ....... x .......   -
 xxxx.xxx.xxxxxxx.xxx.xxxx

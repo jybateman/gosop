@@ -39,6 +39,8 @@ function drawPlayer() {
 }
 
 function drawSquare(x, y, b) {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(x*bsize, y*bsize, bsize, bsize);
     if (b == 120) {
 	ctx.fillStyle = 'black';
 	ctx.fillRect(x*bsize, y*bsize, bsize, bsize);
@@ -68,22 +70,7 @@ function drawMap() {
 	// ctx.rect(x*bsize, y*bsize, bsize, bsize);
 	// ctx.stroke();
 	// END DEBUG
-	if (layout[i] == 120) {
-	    ctx.fillStyle = 'black';
-	    ctx.fillRect(x*bsize, y*bsize, bsize, bsize);
-	} else if (layout[i] == 46) {
-	    ctx.beginPath();
-	    ctx.strokeStyle = 'green';
-	    ctx.fillStyle = 'green';
-	    ctx.arc(x*bsize+ppos, y*bsize+ppos, psize, 0, 2*Math.PI);
-	    ctx.fill();
-	} else if (layout[i] == 42) {
-	    ctx.beginPath();
-	    ctx.strokeStyle = 'green';
-	    ctx.fillStyle = 'green';
-	    ctx.arc(x*bsize+ppos, y*bsize+ppos, ppsize, 0, 2*Math.PI);
-	    ctx.fill();
-	}
+	drawSquare(x, y, layout[i])
 	if (((i+1)%xy[0]) == 0) {
 	    x = 0;
 	    y++;
