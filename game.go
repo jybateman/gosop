@@ -20,13 +20,17 @@ func StartGame(c *websocket.Conn) {
 	g.p = NewPlayer(&g.m)
 	fmt.Println(g.p)
 	c.Write([]byte(fmt.Sprintf("%v", g.m)))
+	dl := time.Now().Add(time.Millisecond*100)
 	for {
-		c.SetReadDeadline(time.Now().Add(time.Millisecond*100))
+		c.SetReadDeadline(dl)
 		c.Read(b)
-		g.p.ChangeDir(string(b))
-		g.p.MovePlayer(&g.m)
-		x := g.p.pos%g.m.x
-		y := g.p.pos/g.m.x
-		c.Write([]byte(fmt.Sprintf("%v %v", x, y)))
+		if dl.Before(time.Now()) {
+			dl = time.Now().Add(time.Millisecond*100)
+			g.p.ChangeDir(string(b))
+			g.p.MovePlayer(&g.m)
+			x := g.p.pos%g.m.x
+			y := g.p.pos/g.m.x
+			c.Write([]byte(fmt.Sprintf("%v %v", x, y)))
+		}
 	}
 }
