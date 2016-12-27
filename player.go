@@ -18,16 +18,16 @@ type player struct {
 	speed int
 }
 
-func (p *player) PeekObstacle(m *maps) bool {
-	switch p.dir {
-	case up:
-		return m.isObstacle(p.pos-m.x*bsize*bsize)
-	case right:
-		return m.isObstacle(p.pos+bsize)
-	case down:
-		return m.isObstacle(p.pos+m.x*bsize*bsize)
-	case left:
-		return m.isObstacle(p.pos-bsize)
+func (p *player) PeekObstacle(m *maps, key string) bool {
+	switch key {
+	case "38":
+		return m.isObstacle(p.pos-m.x)
+	case "39":
+		return m.isObstacle(p.pos+1)
+	case "40":
+		return m.isObstacle(p.pos+m.x)
+	case "37":
+		return m.isObstacle(p.pos-1)
 	}
 	return false
 }

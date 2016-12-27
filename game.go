@@ -27,7 +27,7 @@ func (g *game) StartGame(c *websocket.Conn) {
 	g.p = append(g.p, &p)
 	fmt.Println(p)
 	c.Write([]byte(fmt.Sprintf("%v", g.m)))
-	dl := time.Now().Add(time.Millisecond*100)
+	dl := time.Now()
 	for {
 		c.SetReadDeadline(dl)
 		_, err := c.Read(b)
@@ -38,7 +38,9 @@ func (g *game) StartGame(c *websocket.Conn) {
 		}
 		if dl.Before(time.Now()) {
 			dl = time.Now().Add(time.Millisecond*200)
-			p.ChangeDir(string(b))
+			if !p.PeekObstacle(&g.m, string(b)) {
+				p.ChangeDir(string(b))
+			}
 			p.MovePlayer(&g.m)
 			for _, players := range g.p {
 				x := players.pos%g.m.x
