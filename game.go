@@ -9,16 +9,21 @@ import (
 
 type game struct {
 	m maps
-	p player
+	p []*player
 }
 
-func StartGame(c *websocket.Conn) {
+func NewGame() *game {
 	var g game
 	
-	b := make([]byte, 2)
 	g.m = NewMap()
-	g.p = NewPlayer(&g.m)
-	fmt.Println(g.p)
+	return &g
+}
+
+func (g *game) StartGame(c *websocket.Conn) {
+	b := make([]byte, 2)
+	p := NewPlayer(&g.m)
+	g.p = append(g.p, &p)
+	fmt.Println(p)
 	c.Write([]byte(fmt.Sprintf("%v", g.m)))
 	dl := time.Now().Add(time.Millisecond*100)
 	for {
@@ -26,11 +31,13 @@ func StartGame(c *websocket.Conn) {
 		c.Read(b)
 		if dl.Before(time.Now()) {
 			dl = time.Now().Add(time.Millisecond*100)
-			g.p.ChangeDir(string(b))
-			g.p.MovePlayer(&g.m)
-			x := g.p.pos%g.m.x
-			y := g.p.pos/g.m.x
-			c.Write([]byte(fmt.Sprintf("%v %v", x, y)))
+			p.ChangeDir(string(b))
+			p.MovePlayer(&g.m)
+			for _, players := range g.p {
+				x := players.pos%g.m.x
+				y := players.pos/g.m.x
+				c.Write([]byte(fmt.Sprintf("%v %v", x, y)))
+			}
 		}
 	}
 }

@@ -88,6 +88,8 @@ function getMapInfo(data) {
     xy = str.split(" ");
     str = data.substring(data.lastIndexOf("[")+1, data.lastIndexOf("]"));
     layout = str.split(" ");
+    ctx.canvas.width  = xy[0] * bsize;
+    ctx.canvas.height = xy[1] * bsize;
 }
 
 ws.onmessage = function (event) {

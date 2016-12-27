@@ -21,8 +21,10 @@ func JSHandler(c *websocket.Conn) {
 }
 
 func main() {
+	g := NewGame()
+	
 	http.HandleFunc("/", index)
-	http.Handle("/ws", websocket.Handler(StartGame))
+	http.Handle("/ws", websocket.Handler(g.StartGame))
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
         http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
 	http.ListenAndServe(":4243", nil)
