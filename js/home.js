@@ -20,12 +20,13 @@ function drawPlayer() {
     var x = parseInt(pxy[0]);
     var y = parseInt(pxy[1]);
 
-    drawSquare(x+1, y, layout[x+1+y*xy[0]])
-    drawSquare(x-1, y, layout[x-1+y*xy[0]])
-    drawSquare(x, y+1, layout[x+(y+1)*xy[0]])
-    drawSquare(x, y-1, layout[x+(y-1)*xy[0]])
+    drawSquare(x+1, y, layout[x+1+y*xy[0]]);
+    drawSquare(x-1, y, layout[x-1+y*xy[0]]);
+    drawSquare(x, y+1, layout[x+(y+1)*xy[0]]);
+    drawSquare(x, y-1, layout[x+(y-1)*xy[0]]);
 
-    drawSquare(x, y, layout[x+y*xy[0]])
+    drawSquare(x, y, layout[x+y*xy[0]]);
+    layout[x+y*xy[0]] = 32;
 
     ctx.beginPath();
     ctx.strokeStyle = 'black';

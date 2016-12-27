@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"fmt"
 	"time"
 	
@@ -12,11 +13,12 @@ type game struct {
 	p []*player
 }
 
-func NewGame() *game {
-	var g game
-	
-	g.m = NewMap()
-	return &g
+func (g *game) RemovePlayer(p *player) {
+	for idx, val := range g.p {
+		if val == p {
+			g.p = g.p[:idx+copy(g.p[idx:], g.p[idx+1:])]		
+		}
+	}
 }
 
 func (g *game) StartGame(c *websocket.Conn) {
@@ -28,9 +30,14 @@ func (g *game) StartGame(c *websocket.Conn) {
 	dl := time.Now().Add(time.Millisecond*100)
 	for {
 		c.SetReadDeadline(dl)
-		c.Read(b)
+		_, err := c.Read(b)
+		if err == io.EOF {
+			fmt.Println(err)
+			g.RemovePlayer(&p)
+			return
+		}
 		if dl.Before(time.Now()) {
-			dl = time.Now().Add(time.Millisecond*100)
+			dl = time.Now().Add(time.Millisecond*200)
 			p.ChangeDir(string(b))
 			p.MovePlayer(&g.m)
 			for _, players := range g.p {
@@ -40,4 +47,11 @@ func (g *game) StartGame(c *websocket.Conn) {
 			}
 		}
 	}
+}
+
+func NewGame() *game {
+	var g game
+	
+	g.m = NewMap()
+	return &g
 }

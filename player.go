@@ -60,6 +60,7 @@ func (p *player) MovePlayer(m *maps) {
 	if m.isObstacle(p.pos) {
 		p.pos = tmp
 	}
+	m.layout[p.pos] = ' '
 }
 
 func NewPlayer(m *maps) player {
