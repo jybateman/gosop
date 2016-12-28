@@ -17,8 +17,10 @@ var ctx = c.getContext("2d");
 
 // Draw player on canvas
 function drawPlayer() {
-    var x = parseInt(pxy[0]);
-    var y = parseInt(pxy[1]);
+    // var x = parseInt(pxy[0]);
+    // var y = parseInt(pxy[1]);
+    var x = pxy[0];
+    var y = pxy[1];
 
     drawSquare(x+1, y, layout[x+1+y*xy[0]]);
     drawSquare(x-1, y, layout[x-1+y*xy[0]]);
@@ -27,7 +29,7 @@ function drawPlayer() {
 
     drawSquare(x, y, layout[x+y*xy[0]]);
     layout[x+y*xy[0]] = 32;
-
+    
     ctx.beginPath();
     ctx.strokeStyle = 'black';
     ctx.fillStyle = 'yellow';
@@ -97,16 +99,13 @@ ws.onmessage = function (event) {
     if (layout.length == 0) {
     	getMapInfo(event.data);
 	drawMap();
+	window.setInterval(move, 150);
     } else {
     	str = event.data;
-	pxy = str.split(" ");
+	pxy = str.split(" ").map(Number);
 	drawPlayer();
     }
     // DEBUG
     // document.getElementById('log').innerHTML = pxy;
     // END DEBUG
-}
-
-document.body.onkeydown = function(e) {
-    ws.send(e.keyCode);
 }
