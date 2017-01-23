@@ -1,6 +1,3 @@
-var ip = location.host;
-var ws = new WebSocket("ws://"+ip+"/ws");
-
 // Map info
 var bsize = 20;
 var psize = 2;
@@ -8,19 +5,20 @@ var ppsize = psize*2;
 var ppos = bsize/2;
 var layout = [];
 var xy;
+
 var player;
-var pxy;
+var pxy = [];
 var plsize = 7
+var dir = "39";
+
 
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
 // Draw player on canvas
 function drawPlayer() {
-    // var x = parseInt(pxy[0]);
-    // var y = parseInt(pxy[1]);
-    var x = pxy[0];
-    var y = pxy[1];
+    var x = Math.floor(pxy[0]);
+    var y = Math.floor(pxy[1]);
 
     drawSquare(x+1, y, layout[x+1+y*xy[0]]);
     drawSquare(x-1, y, layout[x-1+y*xy[0]]);
@@ -33,12 +31,13 @@ function drawPlayer() {
     ctx.beginPath();
     ctx.strokeStyle = 'black';
     ctx.fillStyle = 'yellow';
-    ctx.arc(x*bsize+ppos, y*bsize+ppos, plsize, 0, 2*Math.PI);
+    ctx.arc(pxy[0]*bsize+ppos, pxy[1]*bsize+ppos, plsize, 0, 2*Math.PI);
 
     ctx.fill();
     ctx.stroke();
 }
 
+// Draw square b at x and y 
 function drawSquare(x, y, b) {
     ctx.fillStyle = 'white';
     ctx.fillRect(x*bsize, y*bsize, bsize, bsize);
@@ -85,7 +84,7 @@ function drawMap() {
     ctx.stroke();
 }
 
-// Get map information
+// Get map information from data
 function getMapInfo(data) {
     var str = data.substring(data.lastIndexOf("{")+1, data.lastIndexOf("["));
     xy = str.split(" ");
@@ -93,19 +92,4 @@ function getMapInfo(data) {
     layout = str.split(" ");
     ctx.canvas.width  = xy[0] * bsize;
     ctx.canvas.height = xy[1] * bsize;
-}
-
-ws.onmessage = function (event) {
-    if (layout.length == 0) {
-    	getMapInfo(event.data);
-	drawMap();
-	window.setInterval(move, 150);
-    } else {
-    	str = event.data;
-	pxy = str.split(" ").map(Number);
-	drawPlayer();
-    }
-    // DEBUG
-    // document.getElementById('log').innerHTML = pxy;
-    // END DEBUG
 }

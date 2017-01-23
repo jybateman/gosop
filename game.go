@@ -27,7 +27,10 @@ func (g *game) StartGame(c *websocket.Conn) {
 	g.p = append(g.p, &p)
 	fmt.Println(p)
 	c.Write([]byte(fmt.Sprintf("%v", g.m)))
-	dl := time.Now()
+	dl := time.Now().Add(time.Millisecond*200)
+	x := p.pos%g.m.x
+	y := p.pos/g.m.x
+	c.Write([]byte(fmt.Sprintf("%v %v", x, y)))
 	for {
 		c.SetReadDeadline(dl)
 		_, err := c.Read(b)
@@ -42,11 +45,14 @@ func (g *game) StartGame(c *websocket.Conn) {
 				p.ChangeDir(string(b))
 			}
 			p.MovePlayer(&g.m)
-			for _, players := range g.p {
-				x := players.pos%g.m.x
-				y := players.pos/g.m.x
-				c.Write([]byte(fmt.Sprintf("%v %v", x, y)))
-			}
+			x := p.pos%g.m.x
+			y := p.pos/g.m.x
+			fmt.Printf("%d, %d\n", x, y)
+			// for _, players := range g.p {
+			// 	x := players.pos%g.m.x
+			// 	y := players.pos/g.m.x
+			// 	c.Write([]byte(fmt.Sprintf("%v %v", x, y)))
+			// }
 		}
 	}
 }

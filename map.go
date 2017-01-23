@@ -59,7 +59,7 @@ func (m *maps) isObstacle(pos int) bool {
 func NewMap() maps {
 	var m maps
 	
-	f, err := os.Open("map/map2")
+	f, err := os.Open("map/map1")
 	b := bufio.NewReader(f)
 	if err != nil {
 		log.Fatal(err)
