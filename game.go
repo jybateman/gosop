@@ -8,6 +8,11 @@ import (
 	"golang.org/x/net/websocket"
 )
 
+const (
+	rate time.Duration = 200
+	// pvel float = 0.1
+)
+
 type game struct {
 	m maps
 	p []*player
@@ -27,7 +32,7 @@ func (g *game) StartGame(c *websocket.Conn) {
 	g.p = append(g.p, &p)
 	fmt.Println(p)
 	c.Write([]byte(fmt.Sprintf("%v", g.m)))
-	dl := time.Now().Add(time.Millisecond*200)
+	dl := time.Now().Add(time.Millisecond*rate)
 	x := p.pos%g.m.x
 	y := p.pos/g.m.x
 	c.Write([]byte(fmt.Sprintf("%v %v", x, y)))
@@ -40,14 +45,14 @@ func (g *game) StartGame(c *websocket.Conn) {
 			return
 		}
 		if dl.Before(time.Now()) {
-			dl = time.Now().Add(time.Millisecond*200)
+			dl = time.Now().Add(time.Millisecond*rate)
 			if !p.PeekObstacle(&g.m, string(b)) {
 				p.ChangeDir(string(b))
 			}
 			p.MovePlayer(&g.m)
-			x := p.pos%g.m.x
-			y := p.pos/g.m.x
-			fmt.Printf("%d, %d\n", x, y)
+			// x := p.pos%g.m.x
+			// y := p.pos/g.m.x
+			// fmt.Printf("%d, %d\n", x, y)
 			// for _, players := range g.p {
 			// 	x := players.pos%g.m.x
 			// 	y := players.pos/g.m.x

@@ -12,6 +12,7 @@ const (
 )
 
 type player struct {
+	hist []string
 	pos int
 	dir int
 	char int
